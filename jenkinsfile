@@ -1,14 +1,16 @@
-echo "---build start---"
-
-stage('Checkout Stage') {
-		echo "---Checkout---"
-}
-
-stage('Build Stage') {
-		echo "---Build Stage---"
-}
-
-stage('Push Stage') {
-		echo "---Push Stage---"
-		echo "---Push Stage---"
+def call() {
+    pipeline {
+        agent any
+        stages {
+            stage('Docker') {
+                steps {
+                    withCredentials([string(credentialsId: 'DockerHub')]) {
+                        sh "docker login -u 'dlatlrrb' -p '!a1s2d3f4' docker.io"
+                        sh "docker build -t ${dockerRepoName}:latest --tag dlatlrrb/${dockerRepoName}:${imageName} ."
+                        sh "docker push dlatlrrb/${dockerRepoName}:${imageName}"
+                    }
+                }
+            }
+        }
+    }
 }
